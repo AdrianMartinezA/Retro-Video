@@ -55,10 +55,12 @@ RetroVideo/
 ├── docs/api/
 │   ├── openapi.yaml          # Especificación OpenAPI 3.0 de la API REST
 │   └── ejemplos-json/        # Análisis del dominio y ejemplos de peticiones/respuestas
-└── frontend/
-    ├── index.html            # Interfaz web interactiva (Catálogo, Alquileres, Socios y Modales)
-    ├── style.css             # Hoja de estilos responsive (CSS Grid, Flexbox, Dark Theme)
-    └── app.js                # Lógica SPA, filtros en vivo, persistencia localStorage e Inspector API
+├── frontend/
+│   ├── index.html            # Interfaz web interactiva (Catálogo, Alquileres, Socios y Modales)
+│   ├── style.css             # Hoja de estilos responsive (CSS Grid, Flexbox, Dark Theme)
+│   └── app.js                # Lógica SPA, filtros en vivo, persistencia localStorage e Inspector API
+├── .gitignore                # Exclusión de binarios (target/), archivos de IDE y credenciales
+└── README.md                 # Documentación general del proyecto
 ```
 
 ### Modelo de Datos (Entidad-Relación)
@@ -150,7 +152,11 @@ erDiagram
 Selecciona una opción:
 ```
 
-> 💡 *(Opcional: Puedes añadir aquí una captura de pantalla de la web guardándola en `docs/img/preview.png` y enlazándola con `![Vista previa de RetroVideo](docs/img/preview.png)`)*
+### Demostración Web Interactiva (SPA + Inspector API REST)
+Al abrir [`frontend/index.html`](frontend/index.html) en el navegador, la aplicación incluye una **demostración interactiva completa** precargada con los datos de [`database/videoclub.sql`](database/videoclub.sql):
+- **Catálogo en vivo:** Filtrado instantáneo por categoría, valoración mínima y estado de disponibilidad.
+- **Gestión de Alquileres y Devoluciones:** Cálculo automático de fechas (`+3 días`) y liberación de stock en tiempo real.
+- **Simulador OpenAPI 3.0 integrado:** Consola inferior que muestra los *payloads* JSON (`GET`, `POST`, `DELETE`) generados en cada operación según [`docs/api/openapi.yaml`](docs/api/openapi.yaml).
 
 ---
 
@@ -164,5 +170,5 @@ El desarrollo se ha estructurado siguiendo buenas prácticas de ingeniería del 
 
 ## 👤 Autor
 
-**Adrián Martínez**  
+**Adrián Martínez** ([@AdrianMartinezA](https://github.com/AdrianMartinezA))  
 Estudiante de Desarrollo de Aplicaciones Web (1º DAW - Curso 2025/2026) — *IES Severo Ochoa*

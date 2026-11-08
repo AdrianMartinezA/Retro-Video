@@ -1,0 +1,68 @@
+# ==========================================
+# Compilados y empaquetados Java / Maven
+# ==========================================
+target/
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ==========================================
+# IDEs y Editores
+# ==========================================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+# NetBeans
+nbproject/
+nbbuild/
+nbdist/
+
+# ==========================================
+# Credenciales, Entorno y Archivos Sensibles
+# ==========================================
+.env
+*.env
+.env.*
+*.pem
+*.key
+*secret*
+*credentials*
+application-local.properties
+application-prod.properties
+
+# ==========================================
+# Logs y Bases de Datos Locales
+# ==========================================
+*.log
+logs/
+*.sqlite
+*.db
+
+# ==========================================
+# Sistema Operativo
+# ==========================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
