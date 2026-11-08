@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetroVideo | Sistema de Gestión de Videoclub</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <a href="#" class="logo"><i class="fa-solid fa-play"></i> Retro<span>Video</span></a>
+    <div class="nav-links">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#alquileres">Alquileres Activos</a>
+        <a href="#socios-panel">Socios</a>
+        <a href="#api-inspector">API Inspector</a>
+    </div>
+    <div class="nav-actions">
+        <button id="btn-nuevo-producto" class="btn-outline btn-sm"><i class="fa-solid fa-plus"></i> Nuevo Producto</button>
+        <button id="btn-registro" class="btn btn-sm"><i class="fa-solid fa-user-plus"></i> Nuevo Socio</button>
+    </div>
+</nav>
+
+<header id="socio" class="hero">
+    <div class="hero-badge"><i class="fa-solid fa-bolt"></i> Proyecto Intermodular 1º DAW · v1.5</div>
+    <h1>El entretenimiento<br><span>llevado al siguiente nivel</span></h1>
+    <p>Explora nuestro catálogo interactivo de películas de culto y videojuegos de última generación, gestiona socios con validación de DNI y simula alquileres conectados con la especificación OpenAPI 3.0.</p>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="stat-value" id="stat-peliculas">0</span>
+            <span class="stat-label"><i class="fa-solid fa-film"></i> Películas</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="stat-videojuegos">0</span>
+            <span class="stat-label"><i class="fa-solid fa-gamepad"></i> Videojuegos</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="stat-socios">0</span>
+            <span class="stat-label"><i class="fa-solid fa-users"></i> Socios</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="stat-alquileres">0</span>
+            <span class="stat-label"><i class="fa-solid fa-clock-rotate-left"></i> Alquileres Activos</span>
+        </div>
+    </div>
+</header>
+
+<!-- BARRA DE BÚSQUEDA Y FILTROS -->
+<section id="catalogo" class="catalog-section">
+    <div class="section-header">
+        <h2 class="section-title">Catálogo Interactivo</h2>
+        <button id="btn-reset-demo" class="btn-ghost" title="Restaurar datos originales de videoclub.sql">
+            <i class="fa-solid fa-rotate-right"></i> Restaurar Datos SQL
+        </button>
+    </div>
+
+    <div class="filters-bar">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="input-busqueda" placeholder="Buscar por título, director o plataforma...">
+        </div>
+
+        <div class="filter-group">
+            <select id="filtro-tipo" aria-label="Filtrar por categoría">
+                <option value="todos">📦 Todos los productos</option>
+                <option value="pelicula">🎬 Solo Películas</option>
+                <option value="videojuego">🎮 Solo Videojuegos</option>
+            </select>
+
+            <select id="filtro-valoracion" aria-label="Filtrar por valoración mínima">
+                <option value="1">⭐ Cualquier valoración</option>
+                <option value="8">⭐ Valoración 8+ / 10</option>
+                <option value="9">⭐ Valoración 9+ / 10</option>
+                <option value="10">⭐ Obras Maestras (10/10)</option>
+            </select>
+
+            <select id="filtro-estado" aria-label="Filtrar por disponibilidad">
+                <option value="todos">🔄 Todos los estados</option>
+                <option value="disponible">✅ Disponibles</option>
+                <option value="alquilado">⏳ Alquilados</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="catalogo-grid" class="grid">
+        <!-- Renderizado dinámicamente por app.js -->
+    </div>
+</section>
+
+<!-- PANEL DE ALQUILERES ACTIVOS Y DEVOLUCIONES -->
+<section id="alquileres" class="catalog-section">
+    <div class="section-header">
+        <h2 class="section-title">Alquileres Activos y Devoluciones</h2>
+        <span class="subtitle-badge">Plazo automático: +3 días (LocalDate)</span>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Producto</th>
+                    <th>Tipo</th>
+                    <th>Socio (DNI)</th>
+                    <th>Fecha Alquiler</th>
+                    <th>Fecha Devolución</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-alquileres">
+                <!-- Renderizado dinámicamente por app.js -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- PANEL DE SOCIOS Y CONSOLA API REST -->
+<section id="socios-panel" class="catalog-section split-section">
+    <div class="panel-box">
+        <div class="section-header">
+            <h2 class="section-title">Socios Registrados</h2>
+            <button id="btn-registro-inline" class="btn-outline btn-sm"><i class="fa-solid fa-user-plus"></i> Añadir</button>
+        </div>
+        <div id="lista-socios" class="socios-list">
+            <!-- Renderizado dinámicamente por app.js -->
+        </div>
+    </div>
+
+    <div id="api-inspector" class="panel-box api-box">
+        <div class="section-header">
+            <h2 class="section-title">Simulador API REST (OpenAPI 3.0)</h2>
+            <span class="api-status"><span class="dot"></span> Contrato Activo</span>
+        </div>
+        <p class="api-desc">Cada acción en la interfaz genera en tiempo real la petición y respuesta JSON definida en <code>docs/api/openapi.yaml</code>:</p>
+        <div class="code-Header">
+            <span id="api-method-badge" class="badge-method get">GET /api/v1/alquileres</span>
+            <span id="api-status-badge" class="badge-status ok">200 OK</span>
+        </div>
+        <pre id="api-json-output" class="code-block"></pre>
+    </div>
+</section>
+
+<!-- MODAL: ALQUILAR PRODUCTO -->
+<div id="modal-alquiler" class="modal-overlay hidden">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-key"></i> Registrar Alquiler</h3>
+            <button class="modal-close" data-close="modal-alquiler">&times;</button>
+        </div>
+        <form id="form-alquiler">
+            <input type="hidden" id="alquiler-item-id">
+            <input type="hidden" id="alquiler-item-tipo">
+
+            <div class="form-group">
+                <label>Producto seleccionado</label>
+                <input type="text" id="alquiler-item-titulo" readonly class="input-readonly">
+            </div>
+
+            <div class="form-group">
+                <label for="alquiler-socio-dni">Seleccionar Socio (DNI obligatorio)</label>
+                <select id="alquiler-socio-dni" required></select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Fecha de Alquiler</label>
+                    <input type="text" id="alquiler-fecha-inicio" readonly class="input-readonly">
+                </div>
+                <div class="form-group">
+                    <label>Devolución (+3 días)</label>
+                    <input type="text" id="alquiler-fecha-fin" readonly class="input-readonly">
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-ghost" data-close="modal-alquiler">Cancelar</button>
+                <button type="submit" class="btn"><i class="fa-solid fa-check"></i> Confirmar Alquiler</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: REGISTRAR SOCIO -->
+<div id="modal-socio" class="modal-overlay hidden">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-id-card"></i> Alta de Nuevo Socio</h3>
+            <button class="modal-close" data-close="modal-socio">&times;</button>
+        </div>
+        <form id="form-socio">
+            <div class="form-group">
+                <label for="socio-dni">DNI (8 dígitos + letra, UNIQUE)</label>
+                <input type="text" id="socio-dni" placeholder="Ej: 48123456A" maxlength="9" required>
+            </div>
+            <div class="form-group">
+                <label for="socio-nombre">Nombre Completo</label>
+                <input type="text" id="socio-nombre" placeholder="Ej: Laura Gómez" required>
+            </div>
+            <p id="error-socio" class="form-error hidden"></p>
+            <div class="modal-actions">
+                <button type="button" class="btn-ghost" data-close="modal-socio">Cancelar</button>
+                <button type="submit" class="btn"><i class="fa-solid fa-user-check"></i> Guardar Socio</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: AÑADIR PRODUCTO -->
+<div id="modal-producto" class="modal-overlay hidden">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-circle-plus"></i> Añadir al Catálogo</h3>
+            <button class="modal-close" data-close="modal-producto">&times;</button>
+        </div>
+        <form id="form-producto">
+            <div class="form-group">
+                <label for="prod-tipo">Categoría</label>
+                <select id="prod-tipo" required>
+                    <option value="pelicula">🎬 Película</option>
+                    <option value="videojuego">🎮 Videojuego</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="prod-titulo">Título</label>
+                <input type="text" id="prod-titulo" placeholder="Ej: Dune: Part Two" required>
+            </div>
+            <div class="form-group">
+                <label id="label-autor-plat" for="prod-extra">Director</label>
+                <input type="text" id="prod-extra" placeholder="Ej: Denis Villeneuve" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="prod-anio">Año (1895 - 2026)</label>
+                    <input type="number" id="prod-anio" min="1895" max="2026" value="2024" required>
+                </div>
+                <div class="form-group">
+                    <label for="prod-valoracion">Valoración (1 - 10)</label>
+                    <input type="number" id="prod-valoracion" min="1" max="10" value="9" required>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-ghost" data-close="modal-producto">Cancelar</button>
+                <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i> Añadir Producto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- NOTIFICACIÓN TOAST -->
+<div id="toast" class="toast hidden"></div>
+
+<footer>
+    <p>Proyecto Final Intermodular 1º DAW | <strong>Adrián Martínez</strong> &copy; 2026</p>
+    <p style="margin-top: 8px;">IES Severo Ochoa · Java 21 · Hibernate/JPA · MySQL · HTML5/CSS3/JS · OpenAPI 3.0</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

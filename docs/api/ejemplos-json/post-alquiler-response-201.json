@@ -1,0 +1,8 @@
+{
+  "id": 45,
+  "dni_socio": "12345678Z",
+  "nombre_producto": "Interstellar",
+  "tipo_producto": "Película",
+  "fecha_alquiler": "2026-05-11",
+  "fecha_devolucion": "2026-05-14"
+}

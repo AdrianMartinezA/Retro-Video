@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Archivo de configuración de JPA (Java Persistence API).
+    Define la unidad de persistencia que permitirá a la aplicación
+    conectarse con la base de datos y gestionar las entidades mediante Hibernate.
+-->
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">   <!--
+                Ubicación del esquema XML que valida la estructura
+                del archivo persistence.xml según la especificación de Jakarta Persistence.
+             -->
+
+    <!--
+          Definición de la unidad de persistencia.
+          Una unidad de persistencia agrupa la configuración de acceso
+          a la base de datos y las entidades que serán gestionadas por JPA.
+      -->
+    <persistence-unit name="retrovideoPU" transaction-type="RESOURCE_LOCAL">
+        <!--
+           Proveedor de persistencia utilizado.
+           En este caso se utiliza Hibernate como implementación de JPA.
+       -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!--
+              Clase entidad que será gestionada por JPA.
+              Representa la tabla "Pelicula" en la base de datos.
+          -->
+        <class>model.Pelicula</class>
+        <class>model.Socio</class>
+        <class>model.Alquiler</class>
+        <class>model.Videojuego</class>
+
+        <properties>
+
+            <!-- Driver JDBC utilizado para conectar con MySQL -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+
+            <!--
+                URL de conexión a la base de datos.
+                Se conecta a la base de datos "videoclub".
+                Si no existe, se crea automáticamente.
+            -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/videoclub?createDatabaseIfNotExist=true&amp;serverTimezone=UTC"/>
+
+            <!-- Usuario de la base de datos -->
+            <property name="jakarta.persistence.jdbc.user" value="root"/>
+
+            <!-- Contraseña del usuario de la base de datos -->
+            <property name="jakarta.persistence.jdbc.password" value=""/>
+
+            <!--
+                Dialecto de Hibernate.
+                Permite adaptar las consultas SQL al motor de base de datos MySQL.
+            -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+
+            <!--
+                Estrategia de generación de tablas.
+                "update" actualiza la estructura de la base de datos
+                automáticamente según las entidades.
+            -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <!--
+                Muestra las sentencias SQL generadas por Hibernate
+                en la consola durante la ejecución.
+            -->
+            <property name="hibernate.show_sql" value="true"/>
+
+            <!--
+                Formatea las consultas SQL para que sean más legibles en la consola.
+            -->
+            <property name="hibernate.format_sql" value="true"/>
+
+        </properties>
+    </persistence-unit>
+
+</persistence>

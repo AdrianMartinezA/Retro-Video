@@ -1,0 +1,13 @@
+{
+  "error": "Datos de entrada inválidos",
+  "detalles": [
+    {
+      "campo": "dni_socio",
+      "mensaje": "El formato del DNI no es válido o el socio no existe."
+    },
+    {
+      "campo": "id_pelicula",
+      "mensaje": "La película solicitada no se encuentra disponible en el catálogo."
+    }
+  ]
+}

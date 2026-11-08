@@ -1,0 +1,310 @@
+openapi: 3.0.0
+info:
+  title: API de Gestión de Videoclub (RetroVideo)
+  description: API REST para el sistema de gestión del videoclub. Permite administrar el catálogo de películas y videojuegos, gestionar socios y registrar o finalizar alquileres.
+  version: 1.5.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor backend local (Java)
+
+paths:
+  /peliculas:
+    get:
+      summary: Listar catálogo de películas
+      description: Devuelve todas las películas o filtra opcionalmente por año o valoración mínima.
+      parameters:
+        - in: query
+          name: anio
+          schema:
+            type: integer
+          description: Filtrar por año de lanzamiento
+        - in: query
+          name: valoracionMinima
+          schema:
+            type: integer
+          description: Filtrar por valoración mínima (1-10)
+      responses:
+        '200':
+          description: Catálogo de películas obtenido con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pelicula'
+    post:
+      summary: Añadir una nueva película
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pelicula'
+      responses:
+        '201':
+          description: Película creada con éxito.
+
+  /videojuegos:
+    get:
+      summary: Listar catálogo de videojuegos
+      responses:
+        '200':
+          description: Catálogo de videojuegos obtenido con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Videojuego'
+    post:
+      summary: Añadir un nuevo videojuego
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Videojuego'
+      responses:
+        '201':
+          description: Videojuego creado con éxito.
+
+  /socios:
+    get:
+      summary: Listar socios registrados
+      responses:
+        '200':
+          description: Lista de socios obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Socio'
+    post:
+      summary: Registrar un nuevo socio
+      description: Registra un nuevo cliente validando que su DNI sea único.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Socio'
+      responses:
+        '201':
+          description: Socio registrado con éxito.
+        '400':
+          description: DNI duplicado o formato inválido.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /alquileres:
+    get:
+      summary: Obtener todos los alquileres activos
+      description: Devuelve una lista de todos los alquileres activos (películas y videojuegos).
+      responses:
+        '200':
+          description: Lista de alquileres obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alquiler'
+    post:
+      summary: Registrar un nuevo alquiler
+      description: Crea un nuevo alquiler vinculando a un socio con una película o un videojuego (+3 días de plazo).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlquilerInput'
+      responses:
+        '201':
+          description: Alquiler registrado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alquiler'
+        '400':
+          description: Error de validación (ej. socio no existe o producto no encontrado).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /alquileres/{id}:
+    get:
+      summary: Obtener un alquiler por ID
+      description: Devuelve los detalles de un alquiler específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Identificador único del alquiler
+      responses:
+        '200':
+          description: Detalles del alquiler.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alquiler'
+        '404':
+          description: Alquiler no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Procesar devolución de un alquiler
+      description: Finaliza el préstamo activo y libera la película o videojuego en el catálogo.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Identificador único del alquiler a devolver
+      responses:
+        '200':
+          description: Devolución procesada con éxito.
+        '404':
+          description: Alquiler no encontrado.
+
+components:
+  schemas:
+    Pelicula:
+      type: object
+      required: [titulo, director, anio, valoracion]
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 4
+        titulo:
+          type: string
+          example: "Interstellar"
+        director:
+          type: string
+          example: "Christopher Nolan"
+        anio:
+          type: integer
+          example: 2014
+        valoracion:
+          type: integer
+          minimum: 1
+          maximum: 10
+          example: 9
+
+    Videojuego:
+      type: object
+      required: [titulo, plataforma, anio, valoracion]
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 1
+        titulo:
+          type: string
+          example: "The Legend of Zelda: TotK"
+        plataforma:
+          type: string
+          example: "Nintendo Switch"
+        anio:
+          type: integer
+          example: 2023
+        valoracion:
+          type: integer
+          minimum: 1
+          maximum: 10
+          example: 10
+
+    Socio:
+      type: object
+      required: [dni, nombre]
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 1
+        dni:
+          type: string
+          pattern: '^[0-9]{8}[A-Z]$'
+          example: "12345678Z"
+        nombre:
+          type: string
+          example: "Adrián Martínez"
+
+    Alquiler:
+      type: object
+      description: Modelo completo de la entidad Alquiler (respuesta del servidor).
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 45
+        dni_socio:
+          type: string
+          readOnly: true
+          example: "12345678Z"
+        nombre_producto:
+          type: string
+          readOnly: true
+          description: Título de la película o videojuego alquilado.
+          example: "Interstellar"
+        tipo_producto:
+          type: string
+          readOnly: true
+          example: "Película"
+        fecha_alquiler:
+          type: string
+          format: date
+          example: "2026-05-10"
+        fecha_devolucion:
+          type: string
+          format: date
+          description: Fecha calculada automáticamente (+3 días).
+          example: "2026-05-13"
+
+    AlquilerInput:
+      type: object
+      description: Modelo de entrada para crear un alquiler desde el frontend.
+      required:
+        - dni_socio
+      properties:
+        dni_socio:
+          type: string
+          example: "12345678Z"
+        id_pelicula:
+          type: integer
+          nullable: true
+          description: Enviar este campo si se alquila una película.
+          example: 1
+        id_videojuego:
+          type: integer
+          nullable: true
+          description: Enviar este campo si se alquila un videojuego.
+          example: null
+
+    Error:
+      type: object
+      description: Modelo genérico para respuestas de error.
+      properties:
+        error:
+          type: string
+          example: "Datos de entrada inválidos"
+        detalles:
+          type: array
+          items:
+            type: object
+            properties:
+              campo:
+                type: string
+                example: "dni_socio"
+              mensaje:
+                type: string
+                example: "No existe ningún socio registrado con este DNI"
